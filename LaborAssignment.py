@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 class Edge(object):
 	def __init__(self, u, v, w):
 		self.source = u
