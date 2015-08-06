@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 
+from LaborAssignment import FlowNetwork
+
 g = FlowNetwork()
-map(g.AddVertex, ['s', 'o', 'p', 'q', 'r', 't'])
-g.AddEdge('s', 'o')
-g.AddEdge('s', 'p')
-g.AddEdge('o', 'p')
-g.AddEdge('o', 'q')
-g.AddEdge('p', 'r')
-g.AddEdge('r', 't')
-g.AddEdge('q', 'r')
-g.AddEdge('q', 't')
-print g.MaxFlow('s', 't')
+map(g.add_vertex, ['s', 'o', 'p', 'q', 'r', 't'])
+g.add_edge('s', 'o')
+g.add_edge('s', 'p')
+g.add_edge('o', 'p')
+g.add_edge('o', 'q')
+g.add_edge('p', 'r')
+g.add_edge('r', 't')
+g.add_edge('q', 'r')
+g.add_edge('q', 't')
+print g.max_flow('s', 't')
