@@ -55,7 +55,7 @@ def dfs(G, s, visited):
 
 def min_st_edge_cut(G, s, t):
 	path = G.find_path(s, t, [], set())
-	while path != None:
+	while path != 	None:
 		flow = min(res for edge,res in path)
 		for edge,res in path:
 			G.flow[edge] += flow
@@ -68,22 +68,21 @@ def min_st_edge_cut(G, s, t):
 
     # Print all edges that are from a reachable vertex to
     # non-reachable vertex in the original graph
-	for v in G.vertex_set:
-		for edge in G.get_edges(v):
-			if visited[v] and not visited[edge.sink] and edge.capacity > 0:
-				print v, ' - ', edge.sink
+	for name in ['Erick', 'Raul']:
+		for edge in G.get_edges(name):
+			# if visited[v] and not visited[edge.sink] and edge.capacity > 0:
+			if G.flow[edge] == 1:
+				print name, ' - ', edge.sink
 
 g = Graph()
-map(g.add_vertex, ['0', '1', '2', '3', '4', '5'])
-g.add_edge('0', '1', 16)
-g.add_edge('0', '2', 13)
-g.add_edge('1', '2', 10)
-g.add_edge('1', '3', 12)
-g.add_edge('2', '4', 14)
-g.add_edge('2', '1', 4)
-g.add_edge('3', '2', 9)
-g.add_edge('3', '5', 20)
-g.add_edge('4', '3', 7)
-g.add_edge('4', '5', 4)
-min_st_edge_cut(g, '0', '5')
+map(g.add_vertex, ['s', 't', 'Erick', 'Raul', 'Dinner Cooking', 'Lunch Cooking'])
+g.add_edge('s', 'Raul', 1)
+g.add_edge('s', 'Erick', 1)
+g.add_edge('Raul', 'Lunch Cooking', 2)
+g.add_edge('Erick', 'Dinner Cooking', 2)
+g.add_edge('Erick', 'Lunch Cooking', 2)
+g.add_edge('Lunch Cooking', 't', 1)
+g.add_edge('Dinner Cooking', 't', 1)
+min_st_edge_cut(g, 's', 't')
+
 
