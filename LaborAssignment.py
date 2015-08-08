@@ -86,3 +86,127 @@ g.add_edge('Dinner Cooking', 't', 1)
 min_st_edge_cut(g, 's', 't')
 
 
+for name in names:
+	for answer in answers:
+	g.add_edge(name, labor[answer['row']][answer['col']], 2)
+
+
+labor = {   u'9275058246': {   u'9275058263': 0,    # Mon     6 - 7 am
+        	    	           u'9275058264': 0,	# Tues	
+            	    	       u'9275058265': 0,	# Wed
+                	    	   u'9275058266': 0,	# Thurs
+	                	       u'9275058268': 0,	# Fri
+    	                	   u'9275058269': 0,	# Sat
+        	            	   u'9275058270': 0},	# Sun
+    		u'9275058247': {   u'9275058263': 0,	# Mon     7 - 8 am
+        	    	           u'9275058264': 0,	# Tues	
+            	    	       u'9275058265': 0,	# Wed
+                	    	   u'9275058266': 0,	# Thurs
+	                	       u'9275058268': 0,	# Fri
+    	                	   u'9275058269': 0,	# Sat
+        	            	   u'9275058270': 0},	# Sun
+		    u'9275058248': {   u'9275058263': "Mon - Morning Hobbit",	# Mon     8 - 9 am
+        	    	           u'9275058264': "Tues - Morning Hobbit",	# Tues	
+            	    	       u'9275058265': "Wed - Morning Hobbit",	# Wed
+                	    	   u'9275058266': "Thurs - Morning Hobbit",	# Thurs
+	                	       u'9275058268': "Fri - Morning Hobbit",	# Fri
+    	                	   u'9275058269': 0,	# Sat
+        	            	   u'9275058270': 0},	# Sun
+		    u'9275058249': {   u'9275058263': "Mon - Lunch Cook",	# Mon     9 - 10 am
+        	    	           u'9275058264': "Tues - Lunch Cook",	# Tues	
+            	    	       u'9275058265': "Wes - Lunch Cook",	# Wed
+                	    	   u'9275058266': "Thurs - Lunch Cook",	# Thurs
+	                	       u'9275058268': "Fri - Lunch Cook",	# Fri
+    	                	   u'9275058269': "Sat - Morning Hobbit",	# Sat
+        	            	   u'9275058270': "Sun - Morning Hobbit"},	# Sun
+		    u'9275058250': {   u'9275058263': "Mon - Lunch Cook",	# Mon     10 - 11 am
+        	    	           u'9275058264': "Tues - Lunch Cook",	# Tues	
+            	    	       u'9275058265': "Wes - Lunch Cook",	# Wed
+                	    	   u'9275058266': "Thurs - Lunch Cook",	# Thurs
+	                	       u'9275058268': "Fri - Lunch Cook",	# Fri
+    	                	   u'9275058269': 0,	# Sat
+        	            	   u'9275058270': 0},	# Sun
+		    u'9275058251': {   u'9275058263': 0,	# Mon     11 am - 12 pm
+        	    	           u'9275058264': 0,	# Tues	
+            	    	       u'9275058265': 0,	# Wed
+                	    	   u'9275058266': 0,	# Thurs
+	                	       u'9275058268': 0,	# Fri
+    	                	   u'9275058269': 0,	# Sat
+        	            	   u'9275058270': 0},	# Sun
+		    u'9275058252': {   u'9275058263': "Mon - Lunch Clean",	# Mon     12 - 1 pm
+        	    	           u'9275058264': "Tues - Lunch Clean",	# Tues	
+            	    	       u'9275058265': "Wed - Lunch Clean",	# Wed
+                	    	   u'9275058266': "Thurs - Lunch Clean",	# Thurs
+	                	       u'9275058268': "Fri - Lunch Clean",	# Fri
+    	                	   u'9275058269': 0,	# Sat
+        	            	   u'9275058270': 0},	# Sun
+		    u'9275058253': {   u'9275058263': "Mon - Lunch Clean",	# Mon     1 - 2 pm
+        	    	           u'9275058264': "Tues - Lunch Clean",	# Tues	
+            	    	       u'9275058265': "Wed - Lunch Clean",	# Wed
+                	    	   u'9275058266': "Thurs - Lunch Clean",	# Thurs
+	                	       u'9275058268': "Fri - Lunch Clean",	# Fri
+    	                	   u'9275058269': 0,	# Sat
+        	            	   u'9275058270': 0},	# Sun
+		    u'9275058254': {   u'9275058263': "Mon - Dinner Cook",	# Mon     2 - 3 pm
+        	    	           u'9275058264': "Tues - Dinner Cook",	# Tues	
+            	    	       u'9275058265': "Wed - Dinner Cook",	# Wed
+                	    	   u'9275058266': "Thurs - Dinner Cook",	# Thurs
+	                	       u'9275058268': "Fri - Dinner Cook",	# Fri
+    	                	   u'9275058269': 0,	# Sat
+        	            	   u'9275058270': 0},	# Sun
+		    u'9275058255': {   u'9275058263': "Mon - Dinner Cook",	# Mon     3 - 4 pm
+        	    	           u'9275058264': "Tues - Dinner Cook",	# Tues	
+            	    	       u'9275058265': "Wed - Dinner Cook",	# Wed
+                	    	   u'9275058266': "Thurs - Dinner Cook",	# Thurs
+	                	       u'9275058268': "Fri - Dinner Cook",	# Fri
+    	                	   u'9275058269': 0,	# Sat
+        	            	   u'9275058270': 0},	# Sun
+		    u'9275058256': {   u'9275058263': "Mon - Dinner Cook",	# Mon     4 - 5 pm
+        	    	           u'9275058264': "Tues - Dinner Cook",	# Tues	
+            	    	       u'9275058265': "Wed - Dinner Cook",	# Wed
+                	    	   u'9275058266': "Thurs - Dinner Cook",	# Thurs
+	                	       u'9275058268': "Fri - Dinner Cook",	# Fri
+    	                	   u'9275058269': 0,	# Sat
+        	            	   u'9275058270': 0},	# Sun
+		    u'9275058257': {   u'9275058263': "Mon - Dinner Cook",	# Mon     5 - 6 pm
+        	    	           u'9275058264': "Tues - Dinner Cook",	# Tues	
+            	    	       u'9275058265': "Wed - Dinner Cook",	# Wed
+                	    	   u'9275058266': "Thurs - Dinner Cook",	# Thurs
+	                	       u'9275058268': "Fri - Dinner Cook",	# Fri
+    	                	   u'9275058269': 0,	# Sat
+        	            	   u'9275058270': 0},	# Sun
+		    u'9275058258': {   u'9275058263': 0,	# Mon     6 - 7 pm
+        	    	           u'9275058264': 0,	# Tues	
+            	    	       u'9275058265': 0,	# Wed
+                	    	   u'9275058266': 0,	# Thurs
+	                	       u'9275058268': 0,	# Fri
+    	                	   u'9275058269': 0,	# Sat
+        	            	   u'9275058270': 0},	# Sun
+		    u'9275058259': {   u'9275058263': "Mon - Dinner Clean",	# Mon     7 - 8 pm
+        	    	           u'9275058264': "Tues - Dinner Clean",	# Tues	
+            	    	       u'9275058265': "Wed - Dinner Clean",	# Wed
+                	    	   u'9275058266': "Thurs - Dinner Clean",	# Thurs
+	                	       u'9275058268': "Fri - Dinner Clean",	# Fri
+    	                	   u'9275058269': 0,	# Sat
+        	            	   u'9275058270': 0},	# Sun
+		    u'9275058260': {   u'9275058263': "Mon - Dinner Clean",	# Mon     8 - 9 pm
+        	    	           u'9275058264': "Tues - Dinner Clean",	# Tues	
+            	    	       u'9275058265': "Wed - Dinner Clean",	# Wed
+                	    	   u'9275058266': "Thurs - Dinner Clean",	# Thurs
+	                	       u'9275058268': "Fri - Dinner Clean",	# Fri
+    	                	   u'9275058269': 0,	# Sat
+        	            	   u'9275058270': 0},	# Sun
+		    u'9275058261': {   u'9275058263': 0,	# Mon     9 - 10 pm
+        	    	           u'9275058264': 0,	# Tues	
+            	    	       u'9275058265': 0,	# Wed
+                	    	   u'9275058266': 0,	# Thurs
+	                	       u'9275058268': 0,	# Fri
+    	                	   u'9275058269': 0,	# Sat
+        	            	   u'9275058270': 0},	# Sun
+		    u'9275058262': {   u'9275058263': 0,	# Mon     10 - 11 pm
+        	    	           u'9275058264': 0,	# Tues	
+            	    	       u'9275058265': 0,	# Wed
+                	    	   u'9275058266': 0,	# Thurs
+	                	       u'9275058268': 0,	# Fri
+    	                	   u'9275058269': 0,	# Sat
+        	            	   u'9275058270': 0},	# Sun
