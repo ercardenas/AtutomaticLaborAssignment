@@ -52,8 +52,6 @@ class rate_wait:
     def last_called_is_now(self):
         self.last_called = time() 
 
-USER_ACCESS_TOKEN = "paTBz61kMlD0mPWrsaHR3921EuYbHlBvqU0GDZQ.5nahBvB1GbdZpbh2WnOzXY4SzVqw2B-UZ1YP0JHU72xSCB-hZ93w-cyQUnTtyk99rZ8="
-YOUR_API_KEY = "wy5kg6tj3jvfe4sdprjzwmwc"
 
 client = requests.session()
 client.headers = {
@@ -127,7 +125,7 @@ pp.pprint(survey2['data']['pages'][0]['questions'][2]['answers'])
 
 matrix = dict((survey2['data']['pages'][0]['questions'][2]['answers'][r]['answer_id'], \
               dict((survey2['data']['pages'][0]['questions'][2]['answers'][c]['answer_id'],(0)) for c in range(17,24))) for r in range(0,17))
-pp.pprint(matrix)
+# pp.pprint(matrix)
 
 # set up the initial post data for respondents
 respondent_request = {} #create empty associative array/map/dictionary
@@ -174,7 +172,8 @@ while True: #keep polling for new responses until terminated (eg. ctl-c)
     start_pos = 0 # starts at 0, 0 is the first respondent
     respondent_count = len(respondent_ids) # starts at 1
     # initialize blank list of responses for this poll cycle
-    output_response_list = []
+    output_response_list
+     = []
     while start_pos < respondent_count: #see NOTE below
         response_request["respondent_ids"] = \
             respondent_ids[start_pos:start_pos + 100] #see NOTE
@@ -200,12 +199,29 @@ while True: #keep polling for new responses until terminated (eg. ctl-c)
     names = []
     for response in output_response_list:
 		names.append(response['questions'][0]['answers'][0]['text'])
-    print names
+
+
+
+
+    g = Graph()
+    map(g.add_vertex, ['s', 't'])
+    map(g.add_vertex, names) 
+    map(g.add_vertex, labors_list) 
 
     for response in output_response_list:
-		for answer in response['questions'][1]['answers']:
-			print "Col: ", answer['col']
-			print "Row: ", answer['row']
+        name = response['questions'][0]['answers'][0]['text']
+        g.add_edge('s', name, 4)
+        for answer in response['questions'][1]['answers']:
+            labor = labor_map[answer['row']][answer['col']]
+            if(labor != 0):
+                g.add_edge(name, labor, 2)
+
+    for labor in labors_list:
+        g.add_edge(labor[0], 't', labor[1])
+
+    min_st_edge_cut(g, 's', 't')   
+
+
 
     sleep(POLL_CYCLE_LENGTH_IN_MINUTES * 60.0) # wait time in seconds
 
