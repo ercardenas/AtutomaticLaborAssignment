@@ -111,36 +111,36 @@ class LaborGraph(object):
                 if self.flow[edge] == 1:
                     print edge
 
-    class Edge(object):
-        """ A class to represent an edge in LaborGraph class
+class Edge(object):
+    """ A class to represent an edge in LaborGraph class
 
-        The edge(u,v) represents if a halstead member 'u' is available
-        to do labor 'v'
+    The edge(u,v) represents if a halstead member 'u' is available
+    to do labor 'v'
 
-        Attributes:
-            member: tail of the edge, a string to represent a halstead member
-            labor: head of the edge, a string to represent a hastead labor
-            capacity: integer to be used in the labor_assignment function
+    Attributes:
+        member: tail of the edge, a string to represent a halstead member
+        labor: head of the edge, a string to represent a hastead labor
+        capacity: integer to be used in the labor_assignment function
+    """
+
+    def __init__(self, u, v, w):
+        """Inits Edge with the given values
+
+        Args:
+            u: string u that represents a halstead member
+            v: string v that represents a halsead labor
+            w: int that represents capacity
+        """  
+        self.member = u
+        self.labor = v
+        self.capacity = w
+
+    def __repr__(self):
+        """ Prints the assignment from the member to its labor.
+
+        Returns:
+            String representing edge(u,v) as u->v
         """
-
-        def __init__(self, u, v, w):
-            """Inits Edge with the given values
-
-            Args:
-                u: string u that represents a halstead member
-                v: string v that represents a halsead labor
-                w: int that represents capacity
-            """  
-            self.member = u
-            self.labor = v
-            self.capacity = w
-
-        def __repr__(self):
-            """ Prints the assignment from the member to its labor.
-
-            Returns:
-                String representing edge(u,v) as u->v
-            """
-            return "%s->%s" % (self.member, self.labor)
+        return "%s->%s" % (self.member, self.labor)
 
 

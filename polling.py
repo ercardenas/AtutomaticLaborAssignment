@@ -34,6 +34,7 @@ from time import gmtime, mktime, sleep, time
 from datetime import timedelta, datetime	
 from itertools import cycle
 
+
 class rate_wait:
     """Non-threadsafe way to wait until the next time a 
        rate-limited function should be called.
@@ -50,93 +51,95 @@ class rate_wait:
         self.last_called_is_now()
         
     def last_called_is_now(self):
-        self.last_called = time() 
+        self.last_called = time()
 
+def polling():
+    USER_ACCESS_TOKEN = "paTBz61kMlD0mPWrsaHR3921EuYbHlBvqU0GDZQ.5nahBvB1GbdZpbh2WnOzXY4SzVqw2B-UZ1YP0JHU72xSCB-hZ93w-cyQUnTtyk99rZ8="
+    API_KEY = "wy5kg6tj3jvfe4sdprjzwmwc"
 
-client = requests.session()
-client.headers = {
-    "Authorization": "bearer %s" % USER_ACCESS_TOKEN,
-    "Content-Type": "application/json"
-}
-client.params = {
-    "api_key": YOUR_API_KEY
-}
+    client = requests.session()
+    client.headers = {
+        "Authorization": "bearer %s" % USER_ACCESS_TOKEN,
+        "Content-Type": "application/json"
+    }
+    client.params = {
+        "api_key": API_KEY
+    }
 
-SURVEY_TITLE = "Labor Availability Form" #use get_survey_list to find the survey ID
-HOST = "https://api.surveymonkey.net"
-MAX_REQUESTS_PER_SECOND = 2
-POLL_CYCLE_LENGTH_IN_MINUTES = 60.0
- 
-# initialize objects used later on
-pp = pprint.PrettyPrinter(indent=4) 
-limiter = rate_wait(MAX_REQUESTS_PER_SECOND) 
+    SURVEY_TITLE = "Labor Availability Form" #use get_survey_list to find the survey ID
+    HOST = "https://api.surveymonkey.net"
+    MAX_REQUESTS_PER_SECOND = 2
+    POLL_CYCLE_LENGTH_IN_MINUTES = 60.0
+     
+    # initialize objects used later on
+    pp = pprint.PrettyPrinter(indent=4) 
+    limiter = rate_wait(MAX_REQUESTS_PER_SECOND) 
 
-# add paths to HOST to create the two API endpoint URIs
-surveys_uri = "%s/v2/surveys/get_survey_list" % HOST
-details_uri = "%s/v2/surveys/get_survey_details" % HOST
-respondent_uri = "%s/v2/surveys/get_respondent_list" % HOST
-response_uri = "%s/v2/surveys/get_responses" % HOST
+    # add paths to HOST to create the two API endpoint URIs
+    surveys_uri = "%s/v2/surveys/get_survey_list" % HOST
+    details_uri = "%s/v2/surveys/get_survey_details" % HOST
+    respondent_uri = "%s/v2/surveys/get_respondent_list" % HOST
+    response_uri = "%s/v2/surveys/get_responses" % HOST
 
-# find the survey ID by title
-survey_request = {}
-survey_request["title"] = SURVEY_TITLE 
-survey_request["fields"] = ["title","date_created"]
-limiter.wait() #avoid making requests too quickly
-try:
-    survey_data = client.post(surveys_uri, data=json.dumps(survey_request))
-except requests.exceptions.RequestException as e:
-    print("Error finding survey by title: ",SURVEY_TITLE," Exception: ",e)
-    exit()
-limiter.last_called_is_now() #save the time when request completes
-if survey_data.status_code == 200: #the API responded
-    survey_json = survey_data.json()
-    number_of_surveys_found = len(survey_json["data"]["surveys"])
-    if number_of_surveys_found > 1: #title search no specific enough
-        print("Number of surveys found matching \"",SURVEY_TITLE,
-              "\" is ",number_of_surveys_found,".")
-        print("Please configure a more specific title.")
-        print("note: searches are case insensitive.")
-        print()
-        for survey in survey_json["data"]["surveys"]:
-            print("Found: ",survey["title"])
+    # find the survey ID by title
+    survey_request = {}
+    survey_request["title"] = SURVEY_TITLE 
+    survey_request["fields"] = ["title","date_created"]
+    limiter.wait() #avoid making requests too quickly
+    try:
+        survey_data = client.post(surveys_uri, data=json.dumps(survey_request))
+    except requests.exceptions.RequestException as e:
+        print("Error finding survey by title: ",SURVEY_TITLE," Exception: ",e)
         exit()
-    elif number_of_surveys_found == 0: #title search too specific or wrong account
-        print("No survey was found matching the title: \"",SURVEY_TITLE,
-              "\" for the authorized SurveyMonkey account.")
+    limiter.last_called_is_now() #save the time when request completes
+    if survey_data.status_code == 200: #the API responded
+        survey_json = survey_data.json()
+        number_of_surveys_found = len(survey_json["data"]["surveys"])
+        if number_of_surveys_found > 1: #title search no specific enough
+            print("Number of surveys found matching \"",SURVEY_TITLE,
+                  "\" is ",number_of_surveys_found,".")
+            print("Please configure a more specific title.")
+            print("note: searches are case insensitive.")
+            print()
+            for survey in survey_json["data"]["surveys"]:
+                print("Found: ",survey["title"])
+            exit()
+        elif number_of_surveys_found == 0: #title search too specific or wrong account
+            print("No survey was found matching the title: \"",SURVEY_TITLE,
+                  "\" for the authorized SurveyMonkey account.")
+            exit()
+    else: #got an error before reaching the API. message below should help determine why.
+        print("Error finding suvery by title: \"",SURVEY_TITLE,"\"")
+        print(" Response code: ",survey_data.response_code," Message: ", survey_data.text)
         exit()
-else: #got an error before reaching the API. message below should help determine why.
-    print("Error finding suvery by title: \"",SURVEY_TITLE,"\"")
-    print(" Response code: ",survey_data.response_code," Message: ", survey_data.text)
-    exit()
 
-# found one and only one survey matching SURVEY_TITLE  
-# save the survey_id for use in requests for respondents & responses
-survey_id = survey_json["data"]["surveys"][0]["survey_id"]
-# start checking for respondents at the time the survey was created
-last_date_checked = survey_json["data"]["surveys"][0]["date_created"]
-print("Found survey title: ",SURVEY_TITLE," survey_id: ",survey_id," created: ",last_date_checked)
+    # found one and only one survey matching SURVEY_TITLE  
+    # save the survey_id for use in requests for respondents & responses
+    survey_id = survey_json["data"]["surveys"][0]["survey_id"]
+    # start checking for respondents at the time the survey was created
+    last_date_checked = survey_json["data"]["surveys"][0]["date_created"]
+    print("Found survey title: ",SURVEY_TITLE," survey_id: ",survey_id," created: ",last_date_checked)
 
-survey_request = {}
-survey_request["survey_id"] = survey_id
-survey = client.post(details_uri, data=json.dumps(survey_request))
-survey2 = survey.json()
+    # survey_request = {}
+    # survey_request["survey_id"] = survey_id
+    # survey = client.post(details_uri, data=json.dumps(survey_request))
+    # survey_data = survey.json()
+    # survey_answers = survey_data['data']['pages'][0]['questions'][2]['answers']
+    # matrix = dict((survey_answers[r]['answer_id'], \
+    #               dict((survey_answers[c]['answer_id'], (0)) \ 
+    #                 for c in range(17,24))) \
+    #             for r in range(0,17))
+    # pp.pprint(matrix)
 
-pp.pprint(survey2['data']['pages'][0]['questions'][2]['answers'])
+    # set up the initial post data for respondents
+    respondent_request = {} #create empty associative array/map/dictionary
+    respondent_request["survey_id"] = survey_id #key:"survey_id", value:survey_id
+    respondent_request["fields"] = ["status"]
 
-matrix = dict((survey2['data']['pages'][0]['questions'][2]['answers'][r]['answer_id'], \
-              dict((survey2['data']['pages'][0]['questions'][2]['answers'][c]['answer_id'],(0)) for c in range(17,24))) for r in range(0,17))
-# pp.pprint(matrix)
+    # set up the initial post data for responses
+    response_request = {}
+    response_request["survey_id"] = survey_id
 
-# set up the initial post data for respondents
-respondent_request = {} #create empty associative array/map/dictionary
-respondent_request["survey_id"] = survey_id #key:"survey_id", value:survey_id
-respondent_request["fields"] = ["status"]
-
-# set up the initial post data for responses
-response_request = {}
-response_request["survey_id"] = survey_id
-
-while True: #keep polling for new responses until terminated (eg. ctl-c)
     # get time 5 seconds ago for use as the "end_modified_date"
     # in string format for API - this will ensure SurveyMonkey 
     # is done processing all responses between start & end dates
@@ -172,8 +175,7 @@ while True: #keep polling for new responses until terminated (eg. ctl-c)
     start_pos = 0 # starts at 0, 0 is the first respondent
     respondent_count = len(respondent_ids) # starts at 1
     # initialize blank list of responses for this poll cycle
-    output_response_list
-     = []
+    output_response_list = []
     while start_pos < respondent_count: #see NOTE below
         response_request["respondent_ids"] = \
             respondent_ids[start_pos:start_pos + 100] #see NOTE
@@ -186,56 +188,21 @@ while True: #keep polling for new responses until terminated (eg. ctl-c)
             output_response_list.append(response)
         start_pos += 100
 
-    # do something with the output_response_list
-    # - email it to someone
-    # - send it to a webservice with a webhook
-    # - save it to a file or database
-    # let's print it using Pretty Printer:
-    if output_response_list: 
-        pp.pprint(output_response_list)
-    else:
-        print("No new respondents")
-
-    names = []
-    for response in output_response_list:
-		names.append(response['questions'][0]['answers'][0]['text'])
+    return output_response_list
 
 
 
+    # off by one bugs are a common software failure pattern (bug)
+    # http://en.wikipedia.org/wiki/Off-by-one_error
+    # the NOTE below discusses the correctness of this code in Python
+    # Porting this code to other languages will require care when 
+    # considering this section of code.
 
-    g = Graph()
-    map(g.add_vertex, ['s', 't'])
-    map(g.add_vertex, names) 
-    map(g.add_vertex, labors_list) 
-
-    for response in output_response_list:
-        name = response['questions'][0]['answers'][0]['text']
-        g.add_edge('s', name, 4)
-        for answer in response['questions'][1]['answers']:
-            labor = labor_map[answer['row']][answer['col']]
-            if(labor != 0):
-                g.add_edge(name, labor, 2)
-
-    for labor in labors_list:
-        g.add_edge(labor[0], 't', labor[1])
-
-    min_st_edge_cut(g, 's', 't')   
-
-
-
-    sleep(POLL_CYCLE_LENGTH_IN_MINUTES * 60.0) # wait time in seconds
-
-# off by one bugs are a common software failure pattern (bug)
-# http://en.wikipedia.org/wiki/Off-by-one_error
-# the NOTE below discusses the correctness of this code in Python
-# Porting this code to other languages will require care when 
-# considering this section of code.
-
-# NOTE
-# start_pos starts at 0 http://en.wikipedia.org/wiki/Zero-based_numbering
-# while respondent_count is a natural number and starts at 1.
-# If both were zero-based, we would need to compare them with "<=" since
-# Python includes the start position when slicing an array but EXCLUDES 
-# the end position. However, since start_pos has a value one less than the
-# cardinal number of the respondent to which it refers, using "<" is 
-# appropriate in Python.
+    # NOTE
+    # start_pos starts at 0 http://en.wikipedia.org/wiki/Zero-based_numbering
+    # while respondent_count is a natural number and starts at 1.
+    # If both were zero-based, we would need to compare them with "<=" since
+    # Python includes the start position when slicing an array but EXCLUDES 
+    # the end position. However, since start_pos has a value one less than the
+    # cardinal number of the respondent to which it refers, using "<" is 
+    # appropriate in Python.
