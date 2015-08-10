@@ -33,6 +33,7 @@ import __future__ #for compatibility with Python 2.6 & 2.7
 from time import gmtime, mktime, sleep, time
 from datetime import timedelta, datetime	
 from itertools import cycle
+from keys import token, key
 
 
 class rate_wait:
@@ -54,8 +55,8 @@ class rate_wait:
         self.last_called = time()
 
 def polling():
-    USER_ACCESS_TOKEN = "paTBz61kMlD0mPWrsaHR3921EuYbHlBvqU0GDZQ.5nahBvB1GbdZpbh2WnOzXY4SzVqw2B-UZ1YP0JHU72xSCB-hZ93w-cyQUnTtyk99rZ8="
-    API_KEY = "wy5kg6tj3jvfe4sdprjzwmwc"
+    USER_ACCESS_TOKEN = token
+    API_KEY = key
 
     client = requests.session()
     client.headers = {
