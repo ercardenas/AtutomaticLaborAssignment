@@ -2,7 +2,7 @@
 
 from LaborGraph import LaborGraph
 from polling import polling
-from labor_map import labor_map, labors_list
+from constants import labor_map, labors_list
 
 output_response_list = polling()
 
