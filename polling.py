@@ -35,6 +35,8 @@ from datetime import timedelta, datetime
 from itertools import cycle
 from keys import token, key
 
+__author__ = "Erick Cardenas"
+__email__ = "ecardenas@utexas.edu"
 
 class rate_wait:
     """Non-threadsafe way to wait until the next time a 

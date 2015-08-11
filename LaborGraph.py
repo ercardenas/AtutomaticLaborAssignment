@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+__author__ = "Erick Cardenas"
+__email__ = "ecardenas@utexas.edu"
+
 class LaborGraph(object):
     """ A class to represent a bipartite graph
 
@@ -8,35 +11,35 @@ class LaborGraph(object):
     - Halstead labors: different types of work necessary to operate Halstead
 
     Attributes:
-        adj: dict mapping from a halstead member to his possible labor, 
+        compatiable_labors: dict mapping from a halstead member to his possible labor, 
              or viceversa
         flow: dict mapping from an edge to its flow
     """
 
     def __init__(self):
         """Inits LaborGraph with empty values."""  
-        self.adj = {}
+        self.compatiable_labors = {}
         self.flow = {}
 
     def add_vertex(self, v):
-        """Inits the adj dictionary for the new vertex.
+        """Inits the compatiable_labors dictionary for the new vertex.
 
         Args:
             v: vertex to represent either a halstead member or a halstead labor
         """
-        self.adj[v] = []
+        self.compatiable_labors[v] = []
 
-    def get_adj_edges(self, v):
-        """Get the adjacent edges of vertex v.
+    def get_compatiable_labors(self, v):
+        """Get the compatiable_laborsacent edges of vertex v.
 
         Args:
             v: vertex to represent either a halstead member or a halstead labor
 
         Returns:
-            A dict of the adjacent edges to vertex v.mapping from a halstead 
+            A dict of the compatiable_laborsacent edges to vertex v.mapping from a halstead 
             member to his possible labor, or the other way around 
         """
-        return self.adj[v]
+        return self.compatiable_labors[v]
 
     def add_edge(self, u, v, w=0):
         """Adds the given edge into LaborGraph class
@@ -55,8 +58,8 @@ class LaborGraph(object):
         redge = Edge(v,u,0) # residual edge
         edge.redge = redge 
         redge.redge = edge
-        self.adj[u].append(edge)
-        self.adj[v].append(redge)
+        self.compatiable_labors[u].append(edge)
+        self.compatiable_labors[v].append(redge)
         self.flow[edge] = 0
         self.flow[redge] = 0
 
@@ -76,7 +79,7 @@ class LaborGraph(object):
         """ 
         if member == labor:
             return path
-        for edge in self.get_adj_edges(member):
+        for edge in self.get_compatiable_labors(member):
             residual = edge.capacity - self.flow[edge]
             if residual > 0 and not (edge,residual) in path_set:
                 path_set.add((edge, residual))
@@ -107,7 +110,7 @@ class LaborGraph(object):
 
         # Print the final labor assignment
         for member in members:
-            for edge in self.get_adj_edges(member):
+            for edge in self.get_compatiable_labors(member):
                 if self.flow[edge] == 1:
                     print edge
 
